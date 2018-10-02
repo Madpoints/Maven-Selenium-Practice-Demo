@@ -21,20 +21,37 @@ public class LaunchChrome {
 		WebDriver driver = new ChromeDriver();
 		driver.get("https://www.finance.yahoo.com/most-active");
 		
-		symbol = driver.findElement(By.xpath("//a[@class='Fw(b)']")).getText();
+		symbol = driver.findElement(By.xpath("//td[@aria-label='Symbol']")).getText();
+		name = driver.findElement(By.xpath("//td[@aria-label='Name']")).getText();
+		price =driver.findElement(By.xpath("//td[@aria-label='Price (Intraday)']")).getText();
 		
 		tempStock.setSymbol(symbol);
-		System.out.println(tempStock.toString());
+		tempStock.setName(name);
+		tempStock.setPrice(price);
+//		System.out.println(tempStock.toString());
+//	
+//		getSymbols(driver);
+//		
+//		nextPage(driver);
+		
+		List<Stock> stocks = setStocks(driver);
+		
+	}
 	
-		getSymbols(driver);
+	public static List<Stock> setStocks(WebDriver driver) {
 		
-		nextPage(driver);
+		List<WebElement> stocks = driver.findElements(By.xpath("//table[@data-reactid='73']//td"));
 		
+		for (WebElement stock : stocks) {
+			System.out.println(stock.getText());
+		}
+		
+		return null;
 	}
 	
 	public static void getSymbols(WebDriver driver) {
 		
-		List<WebElement> symbols = driver.findElements(By.xpath("//a[@class='Fw(b)']"));
+		List<WebElement> symbols = driver.findElements(By.xpath("//td[@aria-label='Symbol']"));
 		
 		for (WebElement symbol : symbols) {
 			System.out.println(symbol.getText());
