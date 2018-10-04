@@ -37,28 +37,26 @@ public class LaunchChrome {
 		
 		List<Stock> stocks = setStocks(driver);
 		
-		for (Stock stock : stocks) {
-			stock.toString();
-		}
-		
 	}
 	
 	public static List<Stock> setStocks(WebDriver driver) {
 		
-		List<WebElement> stockElements = driver.findElements(By.xpath("//table[@data-reactid='73']"));
-		List<Stock> stocks = null;
+		List<WebElement> stockElements = driver.findElements(By.xpath("//table[@data-reactid='73']//td"));
+		int index = 0;
 		
 		for (WebElement stockElement : stockElements) {
 			
-			Stock tempStock = new Stock();
-			tempStock.setSymbol(stockElement.findElement(By.xpath("//td[@aria-label='Symbol']")).getText());
-			tempStock.setName(stockElement.findElement(By.xpath("//td[@aria-label='Name']")).getText());
-			tempStock.setPrice(stockElement.findElement(By.xpath("//td[@aria-label='Price (Intraday)']")).getText());
+			if (index % 10 == 0) {
+		
+				System.out.println("Index: " + index + "  Symbol: " + stockElement.getText());
+				
+			}
 			
-			stocks.add(tempStock);
+			index++;
+			
 		}
 		
-		return stocks;
+		return null;
 	}
 	
 	public static void getSymbols(WebDriver driver) {
