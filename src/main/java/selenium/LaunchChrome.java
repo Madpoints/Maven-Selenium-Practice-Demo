@@ -1,5 +1,6 @@
 package selenium;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -28,25 +29,36 @@ public class LaunchChrome {
 		tempStock.setSymbol(symbol);
 		tempStock.setName(name);
 		tempStock.setPrice(price);
-//		System.out.println(tempStock.toString());
-//	
+		System.out.println(tempStock.toString());
+	
 //		getSymbols(driver);
 //		
 //		nextPage(driver);
 		
 		List<Stock> stocks = setStocks(driver);
 		
+		for (Stock stock : stocks) {
+			stock.toString();
+		}
+		
 	}
 	
 	public static List<Stock> setStocks(WebDriver driver) {
 		
-		List<WebElement> stocks = driver.findElements(By.xpath("//table[@data-reactid='73']//td"));
+		List<WebElement> stockElements = driver.findElements(By.xpath("//table[@data-reactid='73']"));
+		List<Stock> stocks = null;
 		
-		for (WebElement stock : stocks) {
-			System.out.println(stock.getText());
+		for (WebElement stockElement : stockElements) {
+			
+			Stock tempStock = new Stock();
+			tempStock.setSymbol(stockElement.findElement(By.xpath("//td[@aria-label='Symbol']")).getText());
+			tempStock.setName(stockElement.findElement(By.xpath("//td[@aria-label='Name']")).getText());
+			tempStock.setPrice(stockElement.findElement(By.xpath("//td[@aria-label='Price (Intraday)']")).getText());
+			
+			stocks.add(tempStock);
 		}
 		
-		return null;
+		return stocks;
 	}
 	
 	public static void getSymbols(WebDriver driver) {
