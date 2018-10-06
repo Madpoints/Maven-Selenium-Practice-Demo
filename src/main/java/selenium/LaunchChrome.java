@@ -14,49 +14,67 @@ public class LaunchChrome {
 
 	public static void main(String[] args) {
 		
-		Stock tempStock = new Stock();
-		String symbol, name, price;
-		
 		// path to chrome webdriver exe
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\John\\careerDevs\\Selenium\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.get("https://www.finance.yahoo.com/most-active");
 		
-		symbol = driver.findElement(By.xpath("//td[@aria-label='Symbol']")).getText();
-		name = driver.findElement(By.xpath("//td[@aria-label='Name']")).getText();
-		price =driver.findElement(By.xpath("//td[@aria-label='Price (Intraday)']")).getText();
-		
-		tempStock.setSymbol(symbol);
-		tempStock.setName(name);
-		tempStock.setPrice(price);
-		System.out.println(tempStock.toString());
-	
 //		getSymbols(driver);
 //		
 //		nextPage(driver);
 		
 		List<Stock> stocks = setStocks(driver);
 		
+		for (Stock stock : stocks) {
+			System.out.println(stock.toString());
+		}
+		
 	}
 	
 	public static List<Stock> setStocks(WebDriver driver) {
 		
-		List<WebElement> stockElements = driver.findElements(By.xpath("//table[@data-reactid='73']//td"));
-		int index = 0;
+		List<WebElement> stockSymbolElements = driver.findElements(By.xpath("//table[@data-reactid='73']//td[@aria-label='Symbol']"));
+		List<WebElement> stockNameElements = driver.findElements(By.xpath("//table[@data-reactid='73']//td[@aria-label='Name']"));
+		List<WebElement> stockPriceElements = driver.findElements(By.xpath("//table[@data-reactid='73']//td[@aria-label='Price (Intraday)']"));
 		
-		for (WebElement stockElement : stockElements) {
-			
-			if (index % 10 == 0) {
+		List<Stock> stocks = new ArrayList<Stock>();
 		
-				System.out.println("Index: " + index + "  Symbol: " + stockElement.getText());
-				
-			}
+		int size = stockSymbolElements.size();
+		int listIndex = 0;
+		
+		for (int index = 0; index < size; index++) {
 			
-			index++;
+			Stock tempStock = new Stock();
+			stocks.add(index, tempStock);
 			
 		}
 		
-		return null;
+		for (WebElement stockSymbolElement : stockSymbolElements) {
+			
+			stocks.get(listIndex).setSymbol(stockSymbolElement.getText());
+			listIndex++;
+			
+		}
+		
+		listIndex = 0;
+		
+		for (WebElement stockNameElement : stockNameElements) {
+			
+			stocks.get(listIndex).setName(stockNameElement.getText());
+			listIndex++;
+			
+		}
+		
+		listIndex = 0;
+		
+		for (WebElement stockPriceElement : stockPriceElements) {
+			
+			stocks.get(listIndex).setPrice(stockPriceElement.getText());
+			listIndex++;
+			
+		}
+		
+		return stocks;
 	}
 	
 	public static void getSymbols(WebDriver driver) {
