@@ -20,10 +20,16 @@ public class LaunchChrome {
 		driver.get("https://www.finance.yahoo.com/most-active");
 		
 //		getSymbols(driver);
-//		
-//		nextPage(driver);
 		
 		List<Stock> stocks = setStocks(driver);
+		
+		for (Stock stock : stocks) {
+			System.out.println(stock.toString());
+		}
+		
+		driver = nextPage(driver);
+		
+		stocks = setStocks(driver);
 		
 		for (Stock stock : stocks) {
 			System.out.println(stock.toString());
@@ -87,9 +93,11 @@ public class LaunchChrome {
 		
 	}
 	
-	public static void nextPage(WebDriver driver) {
+	public static WebDriver nextPage(WebDriver driver) {
 		
 		driver.findElement(By.xpath("//button[@data-reactid='740']")).click();
+		
+		return driver;
 	}
 
 }
