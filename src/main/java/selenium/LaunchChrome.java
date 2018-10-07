@@ -19,23 +19,36 @@ public class LaunchChrome {
 		WebDriver driver = new ChromeDriver();
 		driver.get("https://www.finance.yahoo.com/most-active");
 		
-//		getSymbols(driver);
+		WebElement stockTableElement = driver.findElement(By.xpath("//table[@data-reactid='73']"));
 		
-		List<Stock> stocks = setStocks(driver);
-		
-		for (Stock stock : stocks) {
-			System.out.println(stock.toString());
-		}
-		
-		driver = nextPage(driver);
-		
-		stocks = setStocks(driver);
+		List<Stock> stocks = setWebElementToStock(stockTableElement);
 		
 		for (Stock stock : stocks) {
 			System.out.println(stock.toString());
 		}
-		
 	}
+	
+	public static List<Stock> setWebElementToStock(WebElement webElement) {
+		
+		List<Stock> stocks = new ArrayList<Stock>();
+		
+		setStockSymbol(stocks, webElement);
+		
+		return stocks;
+	}
+	
+	public static void setStockSymbol(List<Stock> stocks, WebElement webElement) {
+		
+		List<WebElement> stockSymbolElements = webElement.findElements(By.xpath("//td[@aria-label='Symbol']"));
+		
+		for (WebElement stockSymbol : stockSymbolElements) {
+			
+			Stock tempStock = new Stock();
+			tempStock.setSymbol(stockSymbol.getText());
+			stocks.add(tempStock);
+		}
+	}
+	
 	
 	public static List<Stock> setStocks(WebDriver driver) {
 		
@@ -81,16 +94,6 @@ public class LaunchChrome {
 		}
 		
 		return stocks;
-	}
-	
-	public static void getSymbols(WebDriver driver) {
-		
-		List<WebElement> symbols = driver.findElements(By.xpath("//td[@aria-label='Symbol']"));
-		
-		for (WebElement symbol : symbols) {
-			System.out.println(symbol.getText());
-		}
-		
 	}
 	
 	public static WebDriver nextPage(WebDriver driver) {
